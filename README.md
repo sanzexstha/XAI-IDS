@@ -7,16 +7,11 @@ Modern IDS models often operate as "black boxes," making their predictions diffi
 transparency hinders effective decision-making and limits the widespread
 adoption of machine learning-based IDS in critical sectors. To address
 this issue, the study evaluates the predictive performance of IDS models through various explainable AI (XAI) techniques, including LIME,
-LEMNA, and SHAP. These techniques offer both local and global expla-
-nations, allowing security professionals to understand the key features
+LEMNA, and SHAP. These techniques offer both local and global explanations, allowing security professionals to understand the key features
 driving model predictions and derive actionable insights for mitigating
-potential threats. The paper also explores counterfactual analysis us-
-ing CF-SHAP to enhance interpretability by identifying alternative solu-
-tions. Experimental evaluations on the NSL-KDD and IoTID20 datasets
-demonstrate that these XAI techniques generate meaningful explana-
-tions of the model’s predictions. Specifically, SHAP, LIME, and LEMNA
-effectively highlight important features influencing LSTM model predic-
-tions, while CF-SHAP provides actionable counterfactual explanations
+potential threats. We propose a novel piece-wise linear approximation framework boost local fidelity of explanations. This paper also explores counterfactual analysis using CF-SHAP to enhance interpretability by identifying alternative solutions. Experimental evaluations on the NSL-KDD and IoTID20 datasets
+demonstrate that these XAI techniques generate meaningful explanations of the model’s predictions. Specifically, SHAP, LIME, and LEMNA
+effectively highlight important features influencing LSTM model predictions, while CF-SHAP provides actionable counterfactual explanations
 when applied to models trained with XGBoost. The results highlight the
 potential of XAI techniques to bridge the gap between model accuracy
 and interpretability, fostering improved trust and practical usability of
