@@ -18,12 +18,13 @@ class MultiRegionLimeBase3D(LimeBase):
         super().__init__(kernel_fn, verbose, random_state)
         self.n_regions = n_regions
         self.predict_fn = None
+        self.best_model = None
 
-    def divide_regions(self, data, predictions, distances, original_instance):
+    def divide_regions(self, data, predictions, distances, original_instance, num_features):
         """Divide the perturbed instances into regions using straight lines normal to the decision boundary."""
         pred_diffs = predictions[:, 1] - 0.5
         gradients = np.gradient(pred_diffs, axis=0)
-        projections = np.dot(data - original_instance, gradients[:3])
+        projections = np.dot(data - original_instance, gradients[:num_features])
         region_size = len(projections) // self.n_regions
         sorted_indices = np.argsort(projections)
         regions = np.zeros_like(projections, dtype=int)
@@ -52,11 +53,12 @@ class MultiRegionLimeBase3D(LimeBase):
 
         # Get regions using straight-line division
         regions = self.divide_regions(
-            neighborhood_data, neighborhood_labels, distances, neighborhood_data[0]
+            neighborhood_data, neighborhood_labels, distances, neighborhood_data[0], num_features=num_features
         )
 
         best_score = float("-inf")
         best_explanation = None
+        best_model = None
 
         # Train model for each region
         for region_idx in range(self.n_regions):
@@ -113,10 +115,41 @@ class MultiRegionLimeBase3D(LimeBase):
 
             if score > best_score:
                 best_score = score
+                best_model = easy_model
+
+                # all_coefs = easy_model.coef_[0]                                  # :contentReference[oaicite:0]{index=0}
+
+                # # 3. Get the list of basis-function names (first one is the constant “1”)
+                # basis_names = [str(bf) for bf in easy_model.basis_]             # :contentReference[oaicite:1]{index=1}
+
+                # # 4. The intercept is the coefficient on the constant term
+                # intercept = all_coefs[0]
+
+                # # 5. The remaining features are the other basis functions
+                # used_basis = basis_names[1:]
+                # used_coefs  = all_coefs[1:]
+
+                # # 6. Pair them up and sort by absolute importance
+                # feat_coef_pairs = sorted(
+                #     zip(used_basis, used_coefs),
+                #     key=lambda x: abs(x[1]),
+                #     reverse=True
+                # )
+
+                # # 7. Now you have exactly the same pieces you used before:
+                # best_explanation = (
+                #     intercept,
+                #     feat_coef_pairs,
+                #     score,
+                #     local_pred
+                # )
                 best_explanation = (
                     easy_model.intercept_,
+                    # easy_model.tree_.value[0][0][0],
+
+
                     sorted(
-                        zip(used_features, easy_model.coef_),
+                        zip(used_features, easy_model.coef_ ),  #easy_model.coef_  easy_model.feature_importances_
                         key=lambda x: np.abs(x[1]),
                         reverse=True,
                     ),
@@ -135,6 +168,7 @@ class MultiRegionLimeBase3D(LimeBase):
                 feature_selection,
                 model_regressor,
             )
+        self.best_model = best_model
 
         return best_explanation
 
