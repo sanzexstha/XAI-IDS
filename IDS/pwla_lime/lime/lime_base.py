@@ -199,6 +199,7 @@ class LimeBase(object):
         prediction_score = easy_model.score(
             neighborhood_data[:, used_features], labels_column, sample_weight=weights
         )
+        norm_model = easy_model
 
         local_pred = easy_model.predict(
             neighborhood_data[0, used_features].reshape(1, -1)
@@ -223,4 +224,5 @@ class LimeBase(object):
             ),
             prediction_score,
             local_pred,
+            norm_model
         )

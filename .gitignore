@@ -1,5 +1,32 @@
+# Ignore node_modules directory for JavaScript projects
+node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore compiled files
+*.o
+*.pyc
+
+# Ignore temporary files
+*~
+
+# Ignore virtual env
+.venv
+.venv1
+
+#python
 __pycache__/
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+# Ignore Python bytecode files
 *.py[cod]
-*.pyo
-*.pyd
-*.so
+
+venv/
+env/
+# Ignore datasets
+datasets/
+wandb
+
+py-earth
+
