@@ -28,4 +28,5 @@ env/
 datasets/
 wandb
 
-py-earth/
+py-earth
+
